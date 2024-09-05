@@ -2,66 +2,11 @@ import { useEffect, useState } from "react"
 import { getAllCustomers } from "../apis/getAllCustomers"
 import "./list.css"
 import { useNavigate } from "react-router-dom"
+import { deleteCustomerById } from "../apis/deleteCustomer";
 
-// const CustomerList = () => {
-//     const navigate = useNavigate()
-//     const [customers, setCustomers] = useState([])
-//     const fetchAllCustomers = async () => {
-//         const res = await getAllCustomers()
-//         console.log(res);
-//         setCustomers(res?.data)
-
-//     }
-//     useEffect(() => {
-//         fetchAllCustomers();
-//     }, [])
-//     return (
-//         <>
-//             <div className="list">
-//                 <h1 className="list-title">Customers List</h1>
-//                 <div className="addCustomer">
-//                     <button onClick={() => navigate("/addCustomer")} className="addCustomer-btn">Add Customer</button>
-//                 </div>
-//                 <table className="list-table">
-//                     <thead className="list-header">
-//                         <tr>
-//                             <th>Sr.no.</th>
-//                             <th>Name</th>
-//                             <th>Email</th>
-//                             <th>Phone No.</th>
-//                             <th>Address</th>
-//                             <th>Actions</th>
-//                         </tr>
-//                     </thead>
-//                     <tbody className="list-body">
-//                         {customers && customers.length > 0 ? customers.map((customer, index) => (
-//                             <tr key={index} className="list-row">
-//                                 <td>{index + 1}</td>
-//                                 <td>{customer.name}</td>
-//                                 <td>{customer.email}</td>
-//                                 <td>{customer.phone}</td>
-//                                 <td>{customer.address}</td>
-//                                 <td>
-//                                     <div className="action-buttons">
-//                                         <button className="edit-btn">Edit</button>
-//                                         <button className="delete-btn">Delete</button>
-//                                     </div>
-//                                 </td>
-//                             </tr>
-//                         )) : (
-//                             <tr>
-//                                 <td colSpan="6">No customers found</td>
-//                             </tr>
-//                         )}
-//                     </tbody>
-//                 </table>
-//             </div>
-
-//         </>
-//     )
-// }
 const CustomerList = () => {
     const navigate = useNavigate();
+    const [pageRelode, setReload] = useState("")
     const [customers, setCustomers] = useState([]);
     const [pagination, setPagination] = useState({
         total: 0,
@@ -86,7 +31,6 @@ const CustomerList = () => {
     // };
     const fetchAllCustomers = async () => {
         const res = await getAllCustomers({ page: pagination.page })
-        console.log(res);
         setCustomers(res?.data)
         setPagination({
             ...res.pagination
@@ -96,13 +40,11 @@ const CustomerList = () => {
 
     useEffect(() => {
         fetchAllCustomers();
-    }, [pagination.page]);
+    }, [pagination.page, pageRelode]);
 
     const handlePageChange = (newPage) => {
-        console.log(newPage);
 
         if (newPage > 0 && newPage <= pagination.totalPages) {
-            // fetchAllCustomers(newPage);
             setPagination(prev => ({
                 ...prev,
                 page: newPage
@@ -111,8 +53,8 @@ const CustomerList = () => {
     };
 
     const handleDelete = async (id) => {
-        console.log(id);
-
+        await deleteCustomerById(id)
+        setReload(id)
     }
 
     return (

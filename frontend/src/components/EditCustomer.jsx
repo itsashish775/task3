@@ -31,7 +31,6 @@ const EditCustomer = () => {
         const fetchCustomerData = async () => {
             try {
                 const response = await getCustomerById(id);
-                console.log(response);
 
                 const customer = response.data;
 
@@ -109,7 +108,6 @@ const EditCustomer = () => {
                 }
 
                 const updateRes = await updateCustomer({ id, values });
-                console.log(updateRes);
 
                 if (updateRes.status === 200) {
                     navigate("/");

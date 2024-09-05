@@ -72,12 +72,10 @@ const AddCustomer = () => {
                 values.video = getVideoUrl?.url
 
                 const registerRes = await registerCustomer(values)
-                console.log(registerRes);
                 if (registerRes.status == 201) {
                     navigate("/")
                 }
 
-                console.log('Form Submitted', values);
             } catch (error) {
                 console.error('Error uploading the image', error);
             }

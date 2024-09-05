@@ -14,6 +14,7 @@ router.post("/register", publicController.register)
 router.get("/getAllCustomer", publicController.getAllCustomer)
 router.get("/getCustomerById/:id", publicController.getCustomerById)
 router.post("/updateCustomerById/:id", publicController.updateCustomerById)
+router.delete("/deleteCustomer/:id", publicController.deleteCustomer)
 
 
 

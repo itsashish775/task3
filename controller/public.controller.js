@@ -80,7 +80,6 @@ const publicController = {
     },
     getAllCustomer: async (req, res) => {
         try {
-            console.log(req.url);
 
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
@@ -89,7 +88,7 @@ const publicController = {
             const skip = (page - 1) * limit;
 
             // Fetch customers with pagination
-            const customers = await User.find().skip(skip).limit(limit);
+            const customers = await User.find().skip(skip).limit(limit).sort({ createdAt: -1 });
             const totalCustomers = await User.countDocuments(); // Get total number of customers
 
             res.status(200).json({
@@ -101,6 +100,27 @@ const publicController = {
                     limit,
                     totalPages: Math.ceil(totalCustomers / limit),
                 },
+            });
+        } catch (error) {
+            res.status(500).json({
+                message: "Some Error ...",
+                err: error.message
+            })
+        }
+    },
+    deleteCustomer: async (req, res) => {
+        try {
+            const { id: customerId } = req.params;
+            const result = await User.findByIdAndDelete(customerId);
+
+            if (!result) {
+                return res.status(404).json({
+                    message: "Customer not found"
+                });
+            }
+
+            res.status(200).json({
+                message: "Customer deleted successfully"
             });
         } catch (error) {
             res.status(500).json({
